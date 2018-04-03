@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="3d_customer_api" match-name="accesstoken"/>
+  <table-filter match-catalog="3d_customer_api" match-name="acl"/>
+  <table-filter match-catalog="3d_customer_api" match-name="person"/>
+  <table-filter match-catalog="3d_customer_api" match-name="role"/>
+  <table-filter match-catalog="3d_customer_api" match-name="rolemapping"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_collection_account"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_collection_account_frame"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_collection_dist"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_collection_dist_frame"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_account_frame"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_brand"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_category"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_color"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_company"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_dist_frame"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_focaltype"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_frame_metadata"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_frame_raw"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_frametype"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_gender"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_material"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_inv_shape"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_model"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_order_account"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_order_distributor"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_order_status"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_orderitems"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_user"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_user_account_store"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_user_dist_account"/>
+  <table-filter match-catalog="3d_customer_api" match-name="tbl_user_type"/>
+</hibernate-reverse-engineering>

@@ -1,0 +1,343 @@
+/* custom CSS */
+
+body
+{
+background-color:#fff;
+width:100%;
+font-family:arial;
+font-size:100%;
+min-width:1200px;
+}
+#header
+{
+height:70px;
+background:#000 url("../images/header.png") no-repeat top center scroll;
+}
+
+#header .logo
+{
+background:url("../images/logo2.png") no-repeat left 10px center;
+height:70px;
+width:250px;
+position: relative;
+float: left;
+}
+#header .usercontainer{ float:right;  padding:20px 10px; font-size:12px;
+}
+#header .userinfo{float:left; margin:2px 10px; color:#fff;}
+#header .setting{float:left;}
+
+#header .flowbox{margin:0; padding:0; list-style-type:none;}
+#header .flowbox li{ float:left; margin:0; background:#0162a9;  text-align:center; width:40px; position: relative; cursor: pointer; color:#fff;}
+
+#header .flowbox li a { display:block; color:#fff;}
+
+#header .flowbox li a:hover { background:#0162a9;}
+#header .flowbox li a.disable:hover { background:#ccc; cursor:default;}
+
+#header .flowbox li  ul { 
+padding: 0; position: absolute; 
+-webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; display: none; opacity: 0;visibility: hidden;
+-webkit-transiton: opacity 0.2s; -moz-transition: opacity 0.2s; -ms-transition: opacity 0.2s; -o-transition: opacity 0.2s; -transition: opacity 0.2s;
+list-style-type:none;
+}
+#header .flowbox li ul li{ margin:0; margin-left:-60px; width:100px; background:#0162a9; border:2px solid #0162a9; padding:3px 0;}
+#header .flowbox li ul li a { margin:0 3px; display: block;  color: #fff; padding:5px}
+#header .flowbox li ul li a:hover { background: #f1f1f1; color:#0162a9; }
+#header .flowbox li:hover ul { display: block; opacity: 1;visibility: visible; }
+/*-------Navigation---------*/
+div#mainNav 
+{
+	background-color: #0162a9;
+	display: block;
+	overflow: hidden;
+	width:100%;
+	height:30px;
+	z-index:-9999;
+	margin-bottom:8px;
+}
+div#mainNav ul, div#mainNav li 
+	{
+	margin: 0;
+	padding: 0;
+}
+
+div#mainNav ul li 
+{
+		display: inline-block;
+		list-style-type: none;
+		-webkit-transition: all 0.2s;
+		-moz-transition: all 0.2s;
+		-ms-transition: all 0.2s;
+		-o-transition: all 0.2s;
+		transition: all 0.2s; 
+}
+	
+		div#mainNav > ul > li > a {
+			color: #fff;
+			display: block;
+			line-height: 30px;
+			padding: 0 24px;
+			text-decoration: none;
+			font-weight:bold;
+			font-size:12px;
+			
+		}
+		div#mainNav > ul > li > a > .caret {
+	border-top: 4px solid #fff;
+	border-right: 4px solid transparent;
+	border-left: 4px solid transparent;
+	content: "";
+	display: inline-block;
+	height: 0;
+	width: 0;
+	vertical-align: middle;
+	
+	-webkit-transition: color 0.1s linear;
+	-moz-transition: color 0.1s linear;
+	-o-transition: color 0.1s linear;
+	  transition: color 0.1s linear; 
+}
+	
+	   div#mainNav > ul > li:hover {
+          background-color: #005487;
+		  
+        }
+
+        div#mainNav > ul > li:hover > a {
+          color:#ffffff;
+        }
+
+        div#mainNav > ul > li:hover > a > .caret {
+          border-top-color: #fff;
+        }
+	div#mainNav > ul > li > div {
+	background-color: #f4f4f4;
+	border-top: 0;
+	display: none;
+	margin: 0;
+	opacity: 0;
+	position: absolute;
+	width: auto;
+	visibility: hidden;
+	z-index: 100;
+	
+	-webkit-transiton: opacity 0.2s;
+	-moz-transition: opacity 0.2s;
+	-ms-transition: opacity 0.2s;
+	-o-transition: opacity 0.2s;
+	-transition: opacity 0.2s;
+}
+
+	div#mainNav > ul > li > div ul > li {
+		display: block;
+		border-bottom:1px solid #eeeeee;
+	}
+		div#mainNav > ul > li > div ul > li:last-child
+		{
+			border:0;
+		}
+		div#mainNav > ul > li > div ul > li > a {
+			color: #515252;
+			display: block;
+			padding: 8px 24px;
+			text-decoration: none;
+			font-weight:normal;
+			font-size:12px;
+		}
+	
+	div#mainNav > ul > li > div ul > li:hover > a {
+		background-color:#005487;
+		color:#fff;
+	}
+	div#mainNav > ul > li:hover > div {
+	display: block;
+	opacity: 1;
+	visibility: visible;
+	
+}
+
+
+/*------Navigation End---------*/
+#section
+{
+
+display:block;
+position:relative;
+}
+#section #content{
+	height:300px;
+	background:#f0f0f0;
+	text-align:center;
+	width:99%;
+	margin:0 auto;
+	
+}
+#section #content h3
+{
+	display:block;
+	background:#000;
+	color:#fff;
+	padding:7px;
+	text-align:left;
+	font-size:16px;
+}
+#footer
+{
+width:100%;
+height:30px;
+background:#141414;
+position:fixed;
+bottom:0;
+}
+#footer p
+{
+	text-align:center;
+	font-weight:normal;
+	color:#fff;
+	line-height:30px;
+	font-size:12px;
+}
+
+/*--------login page--------*/
+
+.login{
+	width:100%;
+	min-width:1200px;
+	font-family:arial;
+	font-size:100%;
+	background:url("../images/grey.png") repeat;	
+}
+#logcontainer
+{
+	background:#eaeaea;
+	border-radius:3px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+	/* height:200px*/
+    margin-left: -200px;
+    margin-top: -190px;
+    overflow: visible;
+	box-shadow: 0px 0px 18px #acacac;
+}
+#logheader
+{
+	position:relative;
+
+}
+#logheader h3
+{
+	display:block;
+	background:#000;
+	color:#fff;
+	font-size:18px;
+	text-align:center;
+	padding:20px 10px 20px 10px;
+		border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	-o-border-top-right-radius: 3px;
+    -moz-border-top-right-radius: 3px;
+	-o-border-top-left-radius: 3px;
+    -moz-border-top-left-radius: 3px;
+}
+#logfooter
+{
+	height:70px;
+	position:relative;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	-o-border-bottom-right-radius: 3px;
+    -moz-border-bottom-right-radius: 3px;
+	-o-border-bottom-left-radius: 3px;
+    -moz-border-bottom-left-radius: 3px;
+	background:#eaeaea url("../images/lflogo.png") no-repeat right 45px bottom 10px scroll;
+}
+#logfooter a
+{
+	font-size:12px;
+	line-height:30px;
+	text-decoration:none;
+}
+#logfooter a:hover
+{
+	text-decoration:underline;
+}
+#logfooter a.fp
+{
+	position:relative;
+	left:45px;
+	float:left;
+}
+#logfooter a.nur
+{
+	position:relative;
+	right:45px;
+	float:right;
+}
+#logmain
+{
+	margin:0 auto;
+	width:310px;
+}
+#logmain h3
+{
+	line-height:30px;
+	position:relative;
+}
+#logmain input[type="text"], #logmain input[type="password"] {
+    width: 258px;
+    color: #858282;
+    font-size: 13px;
+    outline: none;
+    background: #fff;
+    border: 1px solid #c4c4c4;
+    border-radius: 2px;
+    -o-border-radius: 2px;
+    -moz-border-radius: 2px;
+    margin: 5px 0;
+	padding:10px 0px 10px 50px;
+}
+#logmain input[type="text"]
+{
+	background:#fff url("../images/usericon.png") no-repeat center left scroll;
+	outline:none;
+}
+#logmain input[type="password"]
+{
+	background:#fff url("../images/pwdicon.png") no-repeat center left scroll;
+	outline:none;
+}
+#logmain input[type="text"]:focus, #logmain input[type="password"]:focus
+{
+	border: 1px solid #0279d0;
+	box-shadow:0px 0px 5px #0162a9 inset;
+}
+#logmain input[type="submit"]
+{
+	font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+	font-weight:bold;
+    outline: none;
+    padding: 10px 15px;
+    width: 100%;
+    border:1px solid #005487;
+    background: #0162a9;
+    border-radius: 2px;
+    -o-border-radius: 2px;
+    -moz-border-radius: 2px;
+	text-transform:uppercase;
+	margin: 5px 0;
+	box-shadow:0px 3px 0px #005487;
+	text-shadow: 0px 1px #005487;
+}
+#logmain .desc{
+	font-size:13px;
+	color:#585858;
+	line-height:14px;
+	padding-top:15px;
+	padding-bottom:5px;
+}
+
