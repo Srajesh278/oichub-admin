@@ -77,7 +77,7 @@ public class PickListView implements ApplicationContextAware {
 			TblUser distributor = distFrame.getTblUser();
 
 			if (distributor != null) {
-				String name = distributor.getName();
+				String name = distributor.getUsername();
 				if (name != null) {
 					if (sourceDistributorList.contains(name)) {
 						sourceDistributorList.remove(name);

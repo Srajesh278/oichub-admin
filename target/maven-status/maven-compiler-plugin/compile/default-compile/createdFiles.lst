@@ -40,11 +40,13 @@ com\ag\dao\TblInvFrametypeDAO.class
 com\ag\dao\TblInvGenderDAOImpl.class
 com\ag\model\TblInvMaterial.class
 com\ag\model\TblInvShape.class
+com\ag\model\OICUser.class
 com\ag\model\TblUserType.class
 com\ag\service\TblInvFrameMetadataServiceImpl.class
 com\ag\model\Person.class
 com\ag\dao\TblInvFrameMetadataDAOImpl.class
 com\ag\dao\TblInvDistFrameDAOImpl.class
+com\ag\bean\SessionBean.class
 com\ag\model\TblInvCompany.class
 com\ag\model\TblOrderitems.class
 com\ag\dao\TblInvColorDAOImpl.class

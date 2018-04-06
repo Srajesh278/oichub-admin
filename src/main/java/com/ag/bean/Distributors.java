@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
@@ -22,7 +23,7 @@ import com.ag.model.TblUser;
 import com.ag.service.TblInvFrameMetadataService;
 
 @ManagedBean
-@ViewScoped
+@RequestScoped
 public class Distributors implements ApplicationContextAware {
 
 	TblInvFrameMetadataService tblInvFrameMetadataService;

@@ -51,6 +51,8 @@ public class FrameMetadata implements ApplicationContextAware{
 	public static ApplicationContext ac;
 	private List<TblInvFrameMetadata> tblInvFrameMetadataList;
 	
+	private List<TblInvFrameMetadata> errorframesList;
+	
 	
 	private List<String> errorString = new ArrayList<>();	
 	
@@ -74,9 +76,17 @@ public class FrameMetadata implements ApplicationContextAware{
 		viewForm = true;
 		frameMetaDataService = (TblInvFrameMetadataService) ac.getBean("frameMetaDataService");	
 		tblInvFrameMetadataList = frameMetaDataService.getAllFrameMetaData();
+		//errorframesList = new ArrayList<>();
 		initializeObjects();
 		
    }
+	
+	public void clearErrorFramesList()
+	{
+		errorframesList = new ArrayList<>();
+
+	}
+	
 	
 	/**
 	 * Method used to initialize objects
@@ -84,6 +94,7 @@ public class FrameMetadata implements ApplicationContextAware{
 	public void initializeObjects() {		
 		viewForm = true;		
 		tblInvFrameMetadata = new TblInvFrameMetadata();
+		errorframesList = new ArrayList<>();
 	}
 	
 	int r=1;
@@ -129,7 +140,7 @@ public class FrameMetadata implements ApplicationContextAware{
             	 TblInvFrameMetadata isframeMetaDataExist = frameMetaDataService.getFrameMetaData("lookzId" ,getCellValue(row.getCell(2)));
             	 if(isframeMetaDataExist!=null)
             	 {
-            		 continue;
+            		 errorString.add("lookzId");
             	 }
             	  
             	  if(row.getCell(2).getStringCellValue() == null || row.getCell(2).getStringCellValue().equals(""))
@@ -396,11 +407,12 @@ public class FrameMetadata implements ApplicationContextAware{
 	
 	 public void writeExcelFile(TblInvFrameMetadata tblInvFrameMetadata, XSSFRow row, XSSFRow errorRow) throws IOException {
 		        		        
+		 		errorframesList.add(tblInvFrameMetadata);
 		 		setErrorReport(true);
 				int col =2;			
 				XSSFCell cell = null;							
 				
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getLookzId());col++;
+				cell = row.createCell(col); if(errorString.contains("lookzId")) {cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getLookzId());col++;
 				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getInternalId());col++;
 				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getModelNumber());col++;
 				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getProductName());col++;
@@ -475,6 +487,14 @@ public class FrameMetadata implements ApplicationContextAware{
 		setTblInvFrameMetadata(tblInvFrameMetadata);		
 	}	
 	
+	public List<TblInvFrameMetadata> getErrorframesList() {
+		return errorframesList;
+	}
+
+	public void setErrorframesList(List<TblInvFrameMetadata> errorframesList) {
+		this.errorframesList = errorframesList;
+	}
+
 	public void create()
 	{   
 		viewForm = false;

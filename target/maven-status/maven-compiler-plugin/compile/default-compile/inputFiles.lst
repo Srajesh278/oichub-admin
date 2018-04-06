@@ -12,6 +12,7 @@ E:\Projects\java\Oichub\src\main\java\com\ag\dao\TblInvFocaltypeDAOImpl.java
 E:\Projects\java\Oichub\src\main\java\com\ag\dao\TblUserDAO.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\TblInvShape.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\Accesstoken.java
+E:\Projects\java\Oichub\src\main\java\com\ag\model\OICUser.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\TblCollectionAccount.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\TblCollectionDistFrame.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\Person.java
@@ -27,6 +28,7 @@ E:\Projects\java\Oichub\src\main\java\com\ag\model\TblOrderDistributor.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\TblInvAccountFrame.java
 E:\Projects\java\Oichub\src\main\java\com\ag\dao\TblInvBrandDAOImpl.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\TblCollectionDist.java
+E:\Projects\java\Oichub\src\main\java\com\ag\bean\SessionBean.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\TblUserDistAccount.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\Rolemapping.java
 E:\Projects\java\Oichub\src\main\java\com\ag\model\TblInvBrand.java
