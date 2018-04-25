@@ -40,6 +40,10 @@
 	text-align: left;
 }
 
+
+
+
+
 div {
 	vertical-align: middle;
 }
@@ -70,19 +74,22 @@ td {
 		<div id="section">
 			<div id="content">
 				<h:form id="metaDataForm">
+				
+				<f:metadata>
+				    <f:event type="preRenderView" listener="#{loginBean.check}" />
+				</f:metadata>
 					<!-- 	<h:commandButton value="Add New" style="position: absolute; top : 5px; right: 125px;" id="createLink" ajax="false" action="#{frameMetadata.edit()}" immediate="true" />
      	<h:commandButton value="Download" style="position: absolute; top : 5px; right: 35px;" id="link"  >
 					<p:dataExporter type="xls" target="metaTableList" fileName="metaData" />				    
-		</h:commandButton>		-->
-		
-					
-
-						<p:dataTable id="metaTableList" var="metaData"
+		</h:commandButton>		-->									
+							
+							<p:dataTable id="metaTableList" var="metaData"
 							style="width: 100%;"
 							value="#{frameMetadata.tblInvFrameMetadataList}"
 							resizableColumns="true" draggableColumns="false"
 							rowIndexVar="rowIndex" rows="100" paginator="true"
-							scrollable="true" scrollWidth="2800">							
+							scrollable="true" scrollWidth="2800" scrollRows="20"  virtualScroll="true" scrollHeight="300">						   
+							    									
 
 							<p:column headerText="Action" width="50" exportable="false">
 

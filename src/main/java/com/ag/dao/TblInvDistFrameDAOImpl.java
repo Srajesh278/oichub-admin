@@ -3,9 +3,11 @@ package com.ag.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.ag.model.TblInvDistFrame;
@@ -31,13 +33,18 @@ public class TblInvDistFrameDAOImpl extends GenericDAOImpl<TblInvDistFrame, Stri
 	@Override
    	@SuppressWarnings("unchecked")
    	public List<TblInvDistFrame> getFrameDistListByUser(TblUser user) { 
-   		Session session = currentSession();         
+   		Session session = currentSession();                 
            
-           
-           Query hqlQuery = session.createQuery("from TblInvDistFrame y where y.tblUser.id= ?");
+         /*  Query hqlQuery = session.createQuery("from TblInvDistFrame y where y.tblUser.id= ?");
    		List<TblInvDistFrame> distFrameList = hqlQuery.setLong(0,user.getId()).list();
        
-   		return distFrameList.size() > 0 ? distFrameList : null ;          
+   		return distFrameList.size() > 0 ? distFrameList : null ;*/
+   		
+   		Criteria criteria =  currentSession().createCriteria(TblInvDistFrame.class);
+		 criteria.createAlias("tblUser", "tblUserId");
+	    	return criteria
+	    			.add(Restrictions.eq("tblUserId.id", user.getId()))	    			
+	    			.list();
            
            
    	}

@@ -83,13 +83,13 @@
 	<div id="logheader">
     <h3>Login</h3>
     </div>
-	<div id="logmain">  
+	<div id="logmain">   
     
     <p:messages id="messages" showDetail="true" showSummary="false" autoUpdate="true" closable="true" />
-    <h:form id="form" name="form" method="post" prependId="false">
-	<p:inputText id="userId" type="text" required="true" styleClass="text" value="#{loginBean.oicuserLogin.userId}" onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="Enter your username "/>
+    <h:form id="form" name="form" method="post" prependId="false"><br/>
+	<p:inputText id="userId" type="text" required="true" styleClass="text" value="#{loginBean.oicuserLogin.userId}" onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="adid"/>
 	<p:message for="userId" display="icon" />
-	<p:inputText id="Password" type="password" required="true" value="#{loginBean.oicuserLogin.authCode}" onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="Enter your password" autocomplete="off"/>
+	<p:inputText id="Password" type="password" required="true" value="#{loginBean.oicuserLogin.authCode}" onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="*****" autocomplete="off"/>
 	<p:message for="Password" id="msgLastname" display="icon" />
 	<p:commandButton styleClass="loginBtnClass" type="submit" value="Log in" actionListener="#{loginBean.doLogin()}" />	
 	</h:form>

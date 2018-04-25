@@ -80,7 +80,7 @@ public class TblInvDistFrame implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "frameid", nullable = false)
 	public TblInvFrameMetadata getTblInvFrameMetadata() {
 		return this.tblInvFrameMetadata;
@@ -90,7 +90,7 @@ public class TblInvDistFrame implements java.io.Serializable {
 		this.tblInvFrameMetadata = tblInvFrameMetadata;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dist_userid", nullable = false)
 	public TblUser getTblUser() {
 		return this.tblUser;
@@ -165,7 +165,7 @@ public class TblInvDistFrame implements java.io.Serializable {
 		this.priceMrp = priceMrp;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tblInvDistFrame")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tblInvDistFrame")
 	public Set<TblOrderitems> getTblOrderitemses() {
 		return this.tblOrderitemses;
 	}
@@ -174,7 +174,7 @@ public class TblInvDistFrame implements java.io.Serializable {
 		this.tblOrderitemses = tblOrderitemses;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tblInvDistFrame")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tblInvDistFrame")
 	public Set<TblCollectionDistFrame> getTblCollectionDistFrames() {
 		return this.tblCollectionDistFrames;
 	}
@@ -183,7 +183,7 @@ public class TblInvDistFrame implements java.io.Serializable {
 		this.tblCollectionDistFrames = tblCollectionDistFrames;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tblInvDistFrame")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tblInvDistFrame")
 	public Set<TblInvAccountFrame> getTblInvAccountFrames() {
 		return this.tblInvAccountFrames;
 	}

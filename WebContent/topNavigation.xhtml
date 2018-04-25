@@ -41,6 +41,7 @@
             	<ul class="flowbox">
             	<p:commandLink global="false"  immediate="true" action="#{loginBean.logout()}" actionListener="#{frameMetadata.clearErrorFramesList()}" ><img src="images/PowerIcon.png" width="15" height="15" />
             	<p:confirm id="confirmation" header="Confirmation" message="Are you sure, you want to log off?" icon="ui-icon-alert" />
+            	
              	</p:commandLink>                
                  <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
  					<p:commandButton id="Yes-Confirmation" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />

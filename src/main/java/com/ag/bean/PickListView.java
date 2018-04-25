@@ -1,6 +1,7 @@
 package com.ag.bean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,7 @@ import com.ag.model.TblUser;
 import com.ag.service.TblInvFrameMetadataService;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class PickListView implements ApplicationContextAware {
 
 	TblInvFrameMetadataService tblInvFrameMetadataService;
@@ -60,6 +61,8 @@ public class PickListView implements ApplicationContextAware {
 		for (TblUser user : listofDist) {
 			sourceDistributorList.add(user.getUsername());
 		}
+		Collections.sort(sourceDistributorList);
+		Collections.sort(TargetDistributorList);
 
 		distributors = new DualListModel<String>(sourceDistributorList, TargetDistributorList);
 	}

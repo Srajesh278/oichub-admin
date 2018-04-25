@@ -1,6 +1,7 @@
 package com.ag.bean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +24,7 @@ import com.ag.model.TblUser;
 import com.ag.service.TblInvFrameMetadataService;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class Distributors implements ApplicationContextAware {
 
 	TblInvFrameMetadataService tblInvFrameMetadataService;
@@ -62,6 +63,9 @@ public class Distributors implements ApplicationContextAware {
 		for (TblInvFrameMetadata frames : listofFrames) {
 			sourceFramesList.add(frames.getModelNumber());
 		}
+		Collections.sort(sourceFramesList);
+		Collections.sort(TargetFramesList);
+		
 
 		metaDataFrames = new DualListModel<String>(sourceFramesList, TargetFramesList);
 	}

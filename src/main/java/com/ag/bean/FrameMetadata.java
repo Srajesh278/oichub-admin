@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -23,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hibernate.context.spi.CurrentSessionContext;
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -43,7 +45,7 @@ import com.fasterxml.uuid.Generators;
 
 @Service
 @ManagedBean(name="frameMetadata")
-@ViewScoped
+@RequestScoped
 public class FrameMetadata implements ApplicationContextAware{	
 		
 	private TblInvFrameMetadataService frameMetaDataService;
@@ -75,16 +77,15 @@ public class FrameMetadata implements ApplicationContextAware{
     private void init()  {		
 		viewForm = true;
 		frameMetaDataService = (TblInvFrameMetadataService) ac.getBean("frameMetaDataService");	
-		tblInvFrameMetadataList = frameMetaDataService.getAllFrameMetaData();
-		//errorframesList = new ArrayList<>();
+		tblInvFrameMetadataList = frameMetaDataService.listFrameMetadata();		
 		initializeObjects();
 		
-   }
+   }	
 	
 	public void clearErrorFramesList()
 	{
+		
 		errorframesList = new ArrayList<>();
-
 	}
 	
 	
@@ -104,7 +105,10 @@ public class FrameMetadata implements ApplicationContextAware{
 	boolean successReport = true;
 	ExternalContext externalContext;
 	FacesContext facesContext;
+	List<Integer> unsavedRows;
+
 	public String uploadItem(FileUploadEvent event) throws IOException {
+		unsavedRows = new ArrayList<>();
 		//initiaion for download
 		initializeObjects();
 		setErrorReport(false);
@@ -134,16 +138,17 @@ public class FrameMetadata implements ApplicationContextAware{
              Iterator<Cell> cellIterator = row.cellIterator();
               if(row.getRowNum()>0)
               {
+            	  
             	  tblInvFrameMetadata = new TblInvFrameMetadata();
             	  
             	
             	 TblInvFrameMetadata isframeMetaDataExist = frameMetaDataService.getFrameMetaData("lookzId" ,getCellValue(row.getCell(2)));
-            	 if(isframeMetaDataExist!=null)
+            	 if(isframeMetaDataExist != null)
             	 {
             		 errorString.add("lookzId");
             	 }
             	  
-            	  if(row.getCell(2).getStringCellValue() == null || row.getCell(2).getStringCellValue().equals(""))
+            	  if((getCellValue(row.getCell(2)) == null || (getCellValue(row.getCell(4)).equals("")) && getCellValue(row.getCell(2)) == null || getCellValue(row.getCell(4)).equals("")) && getCellValue(row.getCell(5)) == null || getCellValue(row.getCell(5)).equals(""))
 	  				{
             		  emptyRow++;
             		  if(emptyRow>3){
@@ -154,6 +159,7 @@ public class FrameMetadata implements ApplicationContextAware{
             	  emptyRow = 0;
             	  UUID uuid = Generators.timeBasedGenerator().generate();
      			 tblInvFrameMetadata.setUuid(uuid.toString());
+     			errorString = new ArrayList<>();
             	  while (cellIterator.hasNext())
                   {
             		  Cell cell = cellIterator.next(); 
@@ -167,15 +173,28 @@ public class FrameMetadata implements ApplicationContextAware{
             			 tblInvFrameMetadata.setLookzId(getCellValue(cell));
             			 break;
             		 case 3:
+            			 
+            			 TblInvFrameMetadata isParentLookzIdExist = frameMetaDataService.getFrameMetaData("lookzId" ,getCellValue(row.getCell(3)));
+                    	 if(isParentLookzIdExist != null  )
+                    	 {
+                    		 tblInvFrameMetadata.setTblInvFrameMetadata(isParentLookzIdExist);
+                    	 } 
+                    	 else
+                    	 {
+                    		unsavedRows.add(row.getRowNum());                    		
+                    		errorString.add("parentLookzId");           				
+                    	 }
+                    	 break;
+            		 case 4:
             			 tblInvFrameMetadata.setInternalId(getCellValue(cell));
             			 break;
-            		 case 4:
+            		 case 5:
             			 tblInvFrameMetadata.setModelNumber(getCellValue(cell));
             			 break;
-            		 case 5:
+            		 case 6:
             			 tblInvFrameMetadata.setProductName(getCellValue(cell));
             			 break;
-            		 case 6:
+            		 case 7:
             			 TblInvCategory category = frameMetaDataService.getCategory(getCellValue(cell));
             			 tblInvFrameMetadata.setTblInvCategory(category != null ? category : new TblInvCategory());
             			 if(category != null)
@@ -190,7 +209,7 @@ public class FrameMetadata implements ApplicationContextAware{
             				 errorString.add("category");
             			 }
             			  break;
-            		 case 7:
+            		 case 8:
             			 TblInvFrametype frameType = frameMetaDataService.getFrameType(getCellValue(cell));
             			 if(frameType != null)
             			 {
@@ -204,7 +223,7 @@ public class FrameMetadata implements ApplicationContextAware{
             				 errorString.add("frameType");
             			 }
             			 break;
-            		 case 8:
+            		 case 9:
             			 TblInvBrand brand = frameMetaDataService.getBrand(getCellValue(cell));
             			 if(brand != null)
             			 {
@@ -218,7 +237,7 @@ public class FrameMetadata implements ApplicationContextAware{
             				 errorString.add("brand");
             			 }
             			 break;
-            		 case 9:
+            		 case 10:
             			 TblInvShape shape = frameMetaDataService.getShape(getCellValue(cell));
             			 if(shape != null)
             			 {
@@ -233,7 +252,7 @@ public class FrameMetadata implements ApplicationContextAware{
             			 }
             			 break;
             			 
-            		 case 10:
+            		 case 11:
             			 TblInvColor frameColor = frameMetaDataService.getColor(getCellValue(cell));
             			               			 
             			 if(frameColor != null)
@@ -250,7 +269,7 @@ public class FrameMetadata implements ApplicationContextAware{
             			 }
             			 
             			 break;
-            		 case 11:
+            		 case 12:
             			 TblInvColor templeColor = frameMetaDataService.getColor(getCellValue(cell));
             			           			 
             			 if(templeColor != null)
@@ -266,7 +285,7 @@ public class FrameMetadata implements ApplicationContextAware{
                 			 tblInvFrameMetadata.setDisplayTemplecolorText(getCellValue(cell));
             			 }
             			 break;
-            		 case 12:
+            		 case 13:
             			 TblInvColor glassColor = frameMetaDataService.getColor(getCellValue(cell));
             			
             			 
@@ -281,11 +300,10 @@ public class FrameMetadata implements ApplicationContextAware{
             				 tblInvFrameMetadata.setTblInvColorByGlassColorId(value);
             				 errorString.add("glassColor");
                 			 tblInvFrameMetadata.setDisplayGlasscolorText(getCellValue(cell));
-            			 }
-            			 
+            			 }            			 
             			 
             			 break;
-            		 case 13:            			 
+            		 case 14:            			 
             			 TblInvMaterial frameMaterial = frameMetaDataService.getMaterial(getCellValue(cell));
             			 if(frameMaterial != null)
             			 {
@@ -299,7 +317,7 @@ public class FrameMetadata implements ApplicationContextAware{
             				 errorString.add("frameMaterial"); 
             			 }
             			 break;
-            		 case 14:
+            		 case 15:
             			 TblInvMaterial templeMaterial = frameMetaDataService.getMaterial(getCellValue(cell));
             			 tblInvFrameMetadata.setTblInvMaterialByTempleMaterialId(templeMaterial != null ? templeMaterial : new TblInvMaterial());
             			 if(templeMaterial != null)
@@ -315,10 +333,10 @@ public class FrameMetadata implements ApplicationContextAware{
             			 }
             			 
             			 break;
-            		 case 15:
+            		 case 16:
             			 tblInvFrameMetadata.setMaterialReflection(getCellValue(cell));
             			 break;
-            		 case 16:
+            		 case 17:
             			 TblInvGender gender = frameMetaDataService.getGender(getCellValue(cell));
             			 if(gender != null)
             			 {
@@ -332,34 +350,34 @@ public class FrameMetadata implements ApplicationContextAware{
             				 errorString.add("gender"); 
             			 }
             			 break;
-            		 case 17:
+            		 case 18:
             			 tblInvFrameMetadata.setDescription(getCellValue(cell));
             			 break;
-            		 case 18:
+            		 case 19:
             			try{ tblInvFrameMetadata.setPrice(getNumberCellValue(cell));}catch (Exception e) {
             				
 						}
             			 break;
-            		 case 19:
+            		 case 20:
             			 tblInvFrameMetadata.setPriceUnit(getCellValue(cell));
             			 break;
-            		 case 20:
+            		 case 21:
             			 tblInvFrameMetadata.setSize(getCellValue(cell));
             			 break;
-            		 case 21:
+            		 case 22:
             			 tblInvFrameMetadata.setSizeActual(getCellValue(cell));
             			 break;
-            		 case 22:
+            		 case 23:
             			 tblInvFrameMetadata.setWeight(getCellValue(cell));
             			 break;
-            		 case 23:
+            		 case 24:
             			try{ tblInvFrameMetadata.setWeightActualGrams(getNumberCellValue(cell));}
             			catch (Exception e) {
 						}
             			 break;
-            		 case 24:
-            			 break;
             		 case 25:
+            			 break;
+            		 case 26:
             			 tblInvFrameMetadata.setImagePath(getCellValue(cell));
             			 break;            			 
             		 }
@@ -368,12 +386,113 @@ public class FrameMetadata implements ApplicationContextAware{
             	  tblInvFrameMetadata.setIsDeleted((byte)0);
             	  tblInvFrameMetadata.setCreateDatetime(new Date());
             	  
-            	  if(errorString.size() > 0)
+            	  if (tblInvFrameMetadata.getModelNumber() == null) {
+            		  errorString.add("modelNumber");
+				  }
+            	  if(tblInvFrameMetadata.getSize() == null)
+            	  {
+            		  errorString.add("size");
+            	  }
+            	  
+            	  if(tblInvFrameMetadata.getTblInvCategory()==null)
+            	  {
+            		  TblInvCategory value = new TblInvCategory();
+            		  value.setCategory(getCellValue(row.getCell(7)));
+            		  tblInvFrameMetadata.setTblInvCategory(value);
+
+            		  errorString.add("category");
+            	  }
+            	  
+            	  
+            	  if(tblInvFrameMetadata.getTblInvFrametype()==null)
+               	  {
+
+						TblInvFrametype value = new TblInvFrametype();
+						value.setFrametype(getCellValue(row.getCell(8)));
+						tblInvFrameMetadata.setTblInvFrametype(value);
+
+               		  errorString.add("frameType");
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvBrand()==null)
+               	  {
+               		TblInvBrand value = new TblInvBrand();
+               		value.setBrand(getCellValue(row.getCell(9)));
+               		tblInvFrameMetadata.setTblInvBrand(value);
+               		  errorString.add("brand");
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvShape()==null)
+               	  {
+
+						TblInvShape value = new TblInvShape();
+						value.setShape(getCellValue(row.getCell(10)));
+						tblInvFrameMetadata.setTblInvShape(value);
+
+               		  errorString.add("shape");
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvColorByFrameColorId()==null)
+               	  {
+               		TblInvColor value =  new TblInvColor();
+               		value.setColor(getCellValue(row.getCell(11)));
+               		tblInvFrameMetadata.setTblInvColorByFrameColorId(value);
+               		errorString.add("frameColor");
+               		tblInvFrameMetadata.setDisplayFramecolorText(getCellValue(row.getCell(11)));
+
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvColorByTempleColorId()==null)
+               	  {
+
+						TblInvColor value =  new TblInvColor();
+						value.setColor(getCellValue(row.getCell(12)));
+						tblInvFrameMetadata.setTblInvColorByTempleColorId(value);
+						errorString.add("templeColor");
+						tblInvFrameMetadata.setDisplayTemplecolorText(getCellValue(row.getCell(12)));
+
+
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvColorByGlassColorId()==null)
+               	  {
+               		TblInvColor value =  new TblInvColor();
+               		value.setColor(getCellValue(row.getCell(13)));
+               		tblInvFrameMetadata.setTblInvColorByGlassColorId(value);
+               		errorString.add("glassColor");
+               		tblInvFrameMetadata.setDisplayGlasscolorText(getCellValue(row.getCell(13)));
+
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvMaterialByFrameMaterialId()==null)
+               	  {
+               		TblInvMaterial value =  new TblInvMaterial();
+               		value.setMaterial(getCellValue(row.getCell(14)));
+               		tblInvFrameMetadata.setTblInvMaterialByFrameMaterialId(value);
+               		  errorString.add("frameMaterial");
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvMaterialByTempleMaterialId()==null)
+               	  {
+               		TblInvMaterial value =  new TblInvMaterial();
+               		value.setMaterial(getCellValue(row.getCell(15)));
+               		tblInvFrameMetadata.setTblInvMaterialByTempleMaterialId(value);
+               		errorString.add("templeMaterial");
+               	  }
+               	  
+               	  if(tblInvFrameMetadata.getTblInvGender()==null)
+               	  {
+               		TblInvGender value = new TblInvGender();
+               		value.setGender(getCellValue(row.getCell(17)));
+               		tblInvFrameMetadata.setTblInvGender(value);
+
+               		  errorString.add("gender");
+               	  }
+            	  
+               	  
+               	  if(errorString.contains("parentLookzId"))
+               	  {
+               		  
+               	  }
+               	  else if(errorString.size() > 0)
             	  {
             		  writeRow = writeSheet.createRow(r);
             		  writeExcelFile(tblInvFrameMetadata, writeRow, row);
             		  r++;
-            	  }
+            	  }            	 
             	  else
             	  {
             	  frameMetaDataService.save(tblInvFrameMetadata);
@@ -382,6 +501,369 @@ public class FrameMetadata implements ApplicationContextAware{
               }
                             
          }        
+         
+         
+         
+         // have to Retune to the code
+         
+         
+         
+         
+         for (Integer getUnsavedRows : unsavedRows)
+         {    
+        	 XSSFRow row = sheet.getRow(getUnsavedRows);
+        	 errorString = new ArrayList<>();
+        	            
+             Iterator<Cell> cellIterator = row.cellIterator();
+              
+            	  
+            	  tblInvFrameMetadata = new TblInvFrameMetadata();
+            	  
+            	
+            	 TblInvFrameMetadata isframeMetaDataExist = frameMetaDataService.getFrameMetaData("lookzId" ,getCellValue(row.getCell(2)));
+            	 if(isframeMetaDataExist != null)
+            	 {
+            		 errorString.add("lookzId");
+            	 }
+            	  
+            	 
+            	  UUID uuid = Generators.timeBasedGenerator().generate();
+     			 tblInvFrameMetadata.setUuid(uuid.toString());
+            	  while (cellIterator.hasNext())
+                  {
+            		  Cell cell = cellIterator.next(); 
+            		  System.out.println(cell.getCellType());
+            		 int i = cell.getColumnIndex();
+            		 
+            		 switch(i)
+            		 {
+            		
+            		 case 2:
+            			 tblInvFrameMetadata.setLookzId(getCellValue(cell));
+            			 break;
+            		 case 3:
+            			 
+            			 TblInvFrameMetadata isParentLookzIdExist = frameMetaDataService.getFrameMetaData("lookzId" ,getCellValue(row.getCell(3)));
+                    	 if(isParentLookzIdExist != null  )
+                    	 {
+                    		 tblInvFrameMetadata.setTblInvFrameMetadata(isParentLookzIdExist);
+                    	 } 
+                    	 else
+                    	 {                    		
+                    		errorString.add("parentLookzId");           				
+                    	 }
+                    	 break;
+            		 case 4:
+            			 tblInvFrameMetadata.setInternalId(getCellValue(cell));
+            			 break;
+            		 case 5:
+            			 tblInvFrameMetadata.setModelNumber(getCellValue(cell));
+            			 break;
+            		 case 6:
+            			 tblInvFrameMetadata.setProductName(getCellValue(cell));
+            			 break;
+            		 case 7:
+            			 TblInvCategory category = frameMetaDataService.getCategory(getCellValue(cell));
+            			 tblInvFrameMetadata.setTblInvCategory(category != null ? category : new TblInvCategory());
+            			 if(category != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvCategory(category);
+            			 }
+            			 else
+            			 {
+            				 TblInvCategory value = new TblInvCategory();
+            				 value.setCategory(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvCategory(value);
+            				 errorString.add("category");
+            			 }
+            			  break;
+            		 case 8:
+            			 TblInvFrametype frameType = frameMetaDataService.getFrameType(getCellValue(cell));
+            			 if(frameType != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvFrametype(frameType);
+            			 }
+            			 else
+            			 {
+            				 TblInvFrametype value = new TblInvFrametype();
+            				 value.setFrametype(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvFrametype(value);
+            				 errorString.add("frameType");
+            			 }
+            			 break;
+            		 case 9:
+            			 TblInvBrand brand = frameMetaDataService.getBrand(getCellValue(cell));
+            			 if(brand != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvBrand(brand);
+            			 }
+            			 else
+            			 {
+            				 TblInvBrand value = new TblInvBrand();
+            				 value.setBrand(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvBrand(value);
+            				 errorString.add("brand");
+            			 }
+            			 break;
+            		 case 10:
+            			 TblInvShape shape = frameMetaDataService.getShape(getCellValue(cell));
+            			 if(shape != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvShape(shape);
+            			 }
+            			 else
+            			 {
+            				 TblInvShape value = new TblInvShape();
+            				 value.setShape(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvShape(value);
+            				 errorString.add("shape");
+            			 }
+            			 break;
+            			 
+            		 case 11:
+            			 TblInvColor frameColor = frameMetaDataService.getColor(getCellValue(cell));
+            			               			 
+            			 if(frameColor != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvColorByFrameColorId(frameColor);
+            			 }
+            			 else
+            			 {
+            				 TblInvColor value =  new TblInvColor();
+            				 value.setColor(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvColorByFrameColorId(value);
+            				 errorString.add("frameColor");
+                			 tblInvFrameMetadata.setDisplayFramecolorText(getCellValue(cell));
+            			 }
+            			 
+            			 break;
+            		 case 12:
+            			 TblInvColor templeColor = frameMetaDataService.getColor(getCellValue(cell));
+            			           			 
+            			 if(templeColor != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvColorByTempleColorId(templeColor);
+            			 }
+            			 else
+            			 {
+            				 TblInvColor value =  new TblInvColor();
+            				 value.setColor(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvColorByTempleColorId(value);
+            				 errorString.add("templeColor");
+                			 tblInvFrameMetadata.setDisplayTemplecolorText(getCellValue(cell));
+            			 }
+            			 break;
+            		 case 13:
+            			 TblInvColor glassColor = frameMetaDataService.getColor(getCellValue(cell));
+            			
+            			 
+            			 if(glassColor != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvColorByGlassColorId(glassColor);
+            			 }
+            			 else
+            			 {
+            				 TblInvColor value =  new TblInvColor();
+            				 value.setColor(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvColorByGlassColorId(value);
+            				 errorString.add("glassColor");
+                			 tblInvFrameMetadata.setDisplayGlasscolorText(getCellValue(cell));
+            			 }            			 
+            			 
+            			 break;
+            		 case 14:            			 
+            			 TblInvMaterial frameMaterial = frameMetaDataService.getMaterial(getCellValue(cell));
+            			 if(frameMaterial != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvMaterialByFrameMaterialId(frameMaterial);
+            			 }
+            			 else
+            			 {
+            				 TblInvMaterial value =  new TblInvMaterial();
+            				 value.setMaterial(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvMaterialByFrameMaterialId(value);
+            				 errorString.add("frameMaterial"); 
+            			 }
+            			 break;
+            		 case 15:
+            			 TblInvMaterial templeMaterial = frameMetaDataService.getMaterial(getCellValue(cell));
+            			 tblInvFrameMetadata.setTblInvMaterialByTempleMaterialId(templeMaterial != null ? templeMaterial : new TblInvMaterial());
+            			 if(templeMaterial != null)
+            			 {
+            			 	 tblInvFrameMetadata.setTblInvMaterialByTempleMaterialId(templeMaterial);
+            			 }
+            			 else
+            			 {
+            				 TblInvMaterial value =  new TblInvMaterial();
+            				 value.setMaterial(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvMaterialByTempleMaterialId(value);
+            				 errorString.add("templeMaterial"); 
+            			 }
+            			 
+            			 break;
+            		 case 16:
+            			 tblInvFrameMetadata.setMaterialReflection(getCellValue(cell));
+            			 break;
+            		 case 17:
+            			 TblInvGender gender = frameMetaDataService.getGender(getCellValue(cell));
+            			 if(gender != null)
+            			 {
+            			 tblInvFrameMetadata.setTblInvGender(gender);
+            			 }
+            			 else
+            			 {
+            				 TblInvGender value = new TblInvGender();
+            				 value.setGender(getCellValue(cell));
+            				 tblInvFrameMetadata.setTblInvGender(value);
+            				 errorString.add("gender"); 
+            			 }
+            			 break;
+            		 case 18:
+            			 tblInvFrameMetadata.setDescription(getCellValue(cell));
+            			 break;
+            		 case 19:
+            			try{ tblInvFrameMetadata.setPrice(getNumberCellValue(cell));}catch (Exception e) {
+            				
+						}
+            			 break;
+            		 case 20:
+            			 tblInvFrameMetadata.setPriceUnit(getCellValue(cell));
+            			 break;
+            		 case 21:
+            			 tblInvFrameMetadata.setSize(getCellValue(cell));
+            			 break;
+            		 case 22:
+            			 tblInvFrameMetadata.setSizeActual(getCellValue(cell));
+            			 break;
+            		 case 23:
+            			 tblInvFrameMetadata.setWeight(getCellValue(cell));
+            			 break;
+            		 case 24:
+            			try{ tblInvFrameMetadata.setWeightActualGrams(getNumberCellValue(cell));}
+            			catch (Exception e) {
+						}
+            			 break;
+            		 case 25:
+            			 break;
+            		 case 26:
+            			 tblInvFrameMetadata.setImagePath(getCellValue(cell));
+            			 break;            			 
+            		 }
+            		  
+                  }
+            	  tblInvFrameMetadata.setIsDeleted((byte)0);
+            	  tblInvFrameMetadata.setCreateDatetime(new Date());
+            	  
+            	  if (tblInvFrameMetadata.getModelNumber() == null) {
+            		  errorString.add("modelNumber");
+				  }
+            	  if(tblInvFrameMetadata.getSize() == null)
+            	  {
+            		  errorString.add("size");
+            	  }
+            	  
+            	  if(tblInvFrameMetadata.getTblInvCategory()==null)
+            	  {
+            		  TblInvCategory value = new TblInvCategory();
+            		  value.setCategory(getCellValue(row.getCell(7)));
+            		  tblInvFrameMetadata.setTblInvCategory(value);
+
+            		  errorString.add("category");
+            	  }
+            	  
+            	  
+            	  if(tblInvFrameMetadata.getTblInvFrametype()==null)
+               	  {
+
+						TblInvFrametype value = new TblInvFrametype();
+						value.setFrametype(getCellValue(row.getCell(8)));
+						tblInvFrameMetadata.setTblInvFrametype(value);
+
+               		  errorString.add("frameType");
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvBrand()==null)
+               	  {
+               		TblInvBrand value = new TblInvBrand();
+               		value.setBrand(getCellValue(row.getCell(9)));
+               		tblInvFrameMetadata.setTblInvBrand(value);
+               		  errorString.add("brand");
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvShape()==null)
+               	  {
+
+						TblInvShape value = new TblInvShape();
+						value.setShape(getCellValue(row.getCell(10)));
+						tblInvFrameMetadata.setTblInvShape(value);
+
+               		  errorString.add("shape");
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvColorByFrameColorId()==null)
+               	  {
+               		TblInvColor value =  new TblInvColor();
+               		value.setColor(getCellValue(row.getCell(11)));
+               		tblInvFrameMetadata.setTblInvColorByFrameColorId(value);
+               		errorString.add("frameColor");
+               		tblInvFrameMetadata.setDisplayFramecolorText(getCellValue(row.getCell(11)));
+
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvColorByTempleColorId()==null)
+               	  {
+
+						TblInvColor value =  new TblInvColor();
+						value.setColor(getCellValue(row.getCell(12)));
+						tblInvFrameMetadata.setTblInvColorByTempleColorId(value);
+						errorString.add("templeColor");
+						tblInvFrameMetadata.setDisplayTemplecolorText(getCellValue(row.getCell(12)));
+
+
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvColorByGlassColorId()==null)
+               	  {
+               		TblInvColor value =  new TblInvColor();
+               		value.setColor(getCellValue(row.getCell(13)));
+               		tblInvFrameMetadata.setTblInvColorByGlassColorId(value);
+               		errorString.add("glassColor");
+               		tblInvFrameMetadata.setDisplayGlasscolorText(getCellValue(row.getCell(13)));
+
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvMaterialByFrameMaterialId()==null)
+               	  {
+               		TblInvMaterial value =  new TblInvMaterial();
+               		value.setMaterial(getCellValue(row.getCell(14)));
+               		tblInvFrameMetadata.setTblInvMaterialByFrameMaterialId(value);
+               		  errorString.add("frameMaterial");
+               	  }
+               	  if(tblInvFrameMetadata.getTblInvMaterialByTempleMaterialId()==null)
+               	  {
+               		TblInvMaterial value =  new TblInvMaterial();
+               		value.setMaterial(getCellValue(row.getCell(15)));
+               		tblInvFrameMetadata.setTblInvMaterialByTempleMaterialId(value);
+               		errorString.add("templeMaterial");
+               	  }
+               	  
+               	  if(tblInvFrameMetadata.getTblInvGender()==null)
+               	  {
+               		TblInvGender value = new TblInvGender();
+               		value.setGender(getCellValue(row.getCell(17)));
+               		tblInvFrameMetadata.setTblInvGender(value);
+
+               		  errorString.add("gender");
+               	  }            	  
+               	  
+               	  
+            	  if(errorString.size() > 0)
+            	  {
+            		  writeRow = writeSheet.createRow(r);
+            		  writeExcelFile(tblInvFrameMetadata, writeRow, row);
+            		  r++;
+            	  }
+            	 
+            	  else
+            	  {
+            	  frameMetaDataService.save(tblInvFrameMetadata);
+        		  tblInvFrameMetadataList.add(tblInvFrameMetadata);
+            	  }
+              }           
              
          r = 1;         
 		return null;		
@@ -410,32 +892,34 @@ public class FrameMetadata implements ApplicationContextAware{
 		 		errorframesList.add(tblInvFrameMetadata);
 		 		setErrorReport(true);
 				int col =2;			
-				XSSFCell cell = null;							
+				XSSFCell cell = null;					
 				
-				cell = row.createCell(col); if(errorString.contains("lookzId")) {cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getLookzId());col++;
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getInternalId());col++;
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getModelNumber());col++;
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getProductName());col++;
-				cell = row.createCell(col);  if(errorString.contains("category")){cell.setCellStyle(styleForColumn);}cell.setCellValue(tblInvFrameMetadata.getTblInvCategory().getCategory());col++;
-				cell = row.createCell(col);  if(errorString.contains("frameType")){cell.setCellStyle(styleForColumn);}cell.setCellValue(tblInvFrameMetadata.getTblInvFrametype().getFrametype());col++;
-				cell = row.createCell(col); if(errorString.contains("brand")){cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getTblInvBrand().getBrand());col++;
-				cell = row.createCell(col); if(errorString.contains("shape")){cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getTblInvShape().getShape());col++;
-				cell = row.createCell(col); if(errorString.contains("frameColor")){cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getTblInvColorByFrameColorId().getColor());col++;
-				cell = row.createCell(col); if(errorString.contains("templeColor")){cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getTblInvColorByTempleColorId().getColor());col++;
-				cell = row.createCell(col); if(errorString.contains("glassColor")){cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getTblInvColorByGlassColorId().getColor());col++;
-				cell = row.createCell(col); if(errorString.contains("frameMaterial")){cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getTblInvMaterialByFrameMaterialId().getMaterial());col++;
-				cell = row.createCell(col); if(errorString.contains("templeMaterial")){cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getTblInvMaterialByTempleMaterialId().getMaterial());col++;
-				cell = row.createCell(col);  cell.setCellValue(tblInvFrameMetadata.getMaterialReflection());col++;
-				cell = row.createCell(col); if(errorString.contains("gender")){cell.setCellStyle(styleForColumn);} cell.setCellValue(tblInvFrameMetadata.getTblInvGender().getGender());col++;
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getDescription());col++;
+				
+				cell = row.createCell(col); if(errorString.contains("lookzId")) {cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("parentLookzId")) {cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("modelNumber")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col);  if(errorString.contains("category")){cell.setCellStyle(styleForColumn);}cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col);  if(errorString.contains("frameType")){cell.setCellStyle(styleForColumn);}cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("brand")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("shape")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("frameColor")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("templeColor")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("glassColor")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("frameMaterial")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("templeMaterial")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col);  cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("gender")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
 				try{cell = row.createCell(col); cell.setCellValue(getNumberCellValue(errorRow.getCell(col)));col++;}catch (Exception e) {
 					// TODO: handle exception
 					col++;
 				}
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getPriceUnit());col++;
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getSize());col++;
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getSizeActual());col++;
-				cell = row.createCell(col); cell.setCellValue(tblInvFrameMetadata.getWeight());col++;
+				cell = row.createCell(col); cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); if(errorString.contains("size")){cell.setCellStyle(styleForColumn);} cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
+				cell = row.createCell(col); cell.setCellValue(getCellValue(errorRow.getCell(col)));col++;
 				try{cell = row.createCell(col); cell.setCellValue(getNumberCellValue(errorRow.getCell(col)));col++;}catch (Exception e) {
 					// TODO: handle exception
 					col++;

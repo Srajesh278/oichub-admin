@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,12 @@ public class TblInvFrameMetadataDAOImpl extends GenericDAOImpl<TblInvFrameMetada
 	        return frameTypeList;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<TblInvFrameMetadata> listFrameMetadata() {
         Session session = this.sessionFactory.getCurrentSession();
 		List<TblInvFrameMetadata> frameMetaDataList =  session.createCriteria(TblInvFrameMetadata.class)
-		.setFetchMode("TblInvBrand", FetchMode.SELECT)
-		.setFetchMode("TblInvCategory", FetchMode.SELECT).list();
+				.addOrder(Order.desc("createDatetime")).list();
 		return frameMetaDataList;
 	}
 

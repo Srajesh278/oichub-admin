@@ -74,8 +74,7 @@ td {
 			<div id="content">
 				<h:form id="metaDataForm">
 				   <f:metadata>
-					  <f:event type="preRenderView" listener="#{loginBean.check}" />
-					   					    
+					    <f:event type="preRenderView" listener="#{loginBean.check}" />
 					</f:metadata>
 				 	<h:commandButton value="Clear Logs" style="position: absolute; top : 5px; left: 305px; height: 25px;" id="createLink" ajax="false" action="#{frameMetadata.clearErrorFramesList()}" immediate="true" update="metaTableList" />
     		
