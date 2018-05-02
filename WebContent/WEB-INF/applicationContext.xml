@@ -19,15 +19,15 @@
 
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
-		<!-- <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<beans:property name="url" value="jdbc:mysql://localhost:3306/3d_customer_api" />
-		<beans:property name="username" value="root" />
-		<beans:property name="password" value="Praveen@2014" /> -->
-		
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://localhost:3306/3d_customer_api" />
+		<beans:property name="username" value="root" />
+		<beans:property name="password" value="Praveen@2014" />
+		
+		<!-- <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<beans:property name="url" value="jdbc:mysql://localhost:3306/3d_customer_api" />
 		<beans:property name="username" value="3d_customer_api" />
-		<beans:property name="password" value="1000lookzmysqlcustomer" />
+		<beans:property name="password" value="1000lookzmysqlcustomer" /> -->
 	</beans:bean>
 
 	<!-- Hibernate 4 SessionFactory Bean definition -->

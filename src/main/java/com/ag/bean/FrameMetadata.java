@@ -133,14 +133,14 @@ public class FrameMetadata implements ApplicationContextAware{
          Iterator<Row> rowIterator = sheet.iterator();
          int emptyRow = 0;
          while (rowIterator.hasNext())
-         {        	 
+         {   
+        	 errorString = new ArrayList<>();
         	 XSSFRow row = (XSSFRow) rowIterator.next();               
              Iterator<Cell> cellIterator = row.cellIterator();
               if(row.getRowNum()>0)
               {
             	  
-            	  tblInvFrameMetadata = new TblInvFrameMetadata();
-            	  
+            	  tblInvFrameMetadata = new TblInvFrameMetadata();            	  
             	
             	 TblInvFrameMetadata isframeMetaDataExist = frameMetaDataService.getFrameMetaData("lookzId" ,getCellValue(row.getCell(2)));
             	 if(isframeMetaDataExist != null)
@@ -148,7 +148,7 @@ public class FrameMetadata implements ApplicationContextAware{
             		 errorString.add("lookzId");
             	 }
             	  
-            	  if((getCellValue(row.getCell(2)) == null || (getCellValue(row.getCell(4)).equals("")) && getCellValue(row.getCell(2)) == null || getCellValue(row.getCell(4)).equals("")) && getCellValue(row.getCell(5)) == null || getCellValue(row.getCell(5)).equals(""))
+            	  if((getCellValue(row.getCell(2)) == null || getCellValue(row.getCell(2)).equals("")) &&( getCellValue(row.getCell(4)) == null || getCellValue(row.getCell(4)).equals("")) && (getCellValue(row.getCell(5)) == null || getCellValue(row.getCell(5)).equals("")))
 	  				{
             		  emptyRow++;
             		  if(emptyRow>3){
@@ -159,7 +159,7 @@ public class FrameMetadata implements ApplicationContextAware{
             	  emptyRow = 0;
             	  UUID uuid = Generators.timeBasedGenerator().generate();
      			 tblInvFrameMetadata.setUuid(uuid.toString());
-     			errorString = new ArrayList<>();
+     			
             	  while (cellIterator.hasNext())
                   {
             		  Cell cell = cellIterator.next(); 
@@ -173,7 +173,10 @@ public class FrameMetadata implements ApplicationContextAware{
             			 tblInvFrameMetadata.setLookzId(getCellValue(cell));
             			 break;
             		 case 3:
-            			 
+            			 String  stringSell = getCellValue(row.getCell(3));
+            			 System.out.println(stringSell + "*******************string CellValue");
+            			 if(!getCellValue(row.getCell(3)).equals(""))
+            			 {
             			 TblInvFrameMetadata isParentLookzIdExist = frameMetaDataService.getFrameMetaData("lookzId" ,getCellValue(row.getCell(3)));
                     	 if(isParentLookzIdExist != null  )
                     	 {
@@ -182,8 +185,9 @@ public class FrameMetadata implements ApplicationContextAware{
                     	 else
                     	 {
                     		unsavedRows.add(row.getRowNum());                    		
-                    		errorString.add("parentLookzId");           				
+                    		continue;
                     	 }
+            			 }
                     	 break;
             		 case 4:
             			 tblInvFrameMetadata.setInternalId(getCellValue(cell));
@@ -480,13 +484,9 @@ public class FrameMetadata implements ApplicationContextAware{
                		tblInvFrameMetadata.setTblInvGender(value);
 
                		  errorString.add("gender");
-               	  }
-            	  
+               	  }         	  
                	  
-               	  if(errorString.contains("parentLookzId"))
-               	  {
-               		  
-               	  }
+               	  
                	  else if(errorString.size() > 0)
             	  {
             		  writeRow = writeSheet.createRow(r);
@@ -524,8 +524,7 @@ public class FrameMetadata implements ApplicationContextAware{
             	 if(isframeMetaDataExist != null)
             	 {
             		 errorString.add("lookzId");
-            	 }
-            	  
+            	 }            	  
             	 
             	  UUID uuid = Generators.timeBasedGenerator().generate();
      			 tblInvFrameMetadata.setUuid(uuid.toString());
@@ -542,7 +541,7 @@ public class FrameMetadata implements ApplicationContextAware{
             			 tblInvFrameMetadata.setLookzId(getCellValue(cell));
             			 break;
             		 case 3:
-            			 
+            			
             			 TblInvFrameMetadata isParentLookzIdExist = frameMetaDataService.getFrameMetaData("lookzId" ,getCellValue(row.getCell(3)));
                     	 if(isParentLookzIdExist != null  )
                     	 {
@@ -552,6 +551,7 @@ public class FrameMetadata implements ApplicationContextAware{
                     	 {                    		
                     		errorString.add("parentLookzId");           				
                     	 }
+            			
                     	 break;
             		 case 4:
             			 tblInvFrameMetadata.setInternalId(getCellValue(cell));
@@ -937,7 +937,7 @@ public class FrameMetadata implements ApplicationContextAware{
 		if(cell != null)
 		{
 		cell.setCellType(1);;
-		return cell.getStringCellValue();
+		return cell.getStringCellValue().trim();
 		}
 		return "";
 	}
