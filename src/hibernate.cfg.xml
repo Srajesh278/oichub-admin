@@ -15,4 +15,4 @@
   <property name="hibernate.connection.username">3d_customer_api</property>
   <property name="hibernate.current_session_context_class">thread</property>
  </session-factory>
-</hibernate-configuration>
+</hibernate-configuration> 
