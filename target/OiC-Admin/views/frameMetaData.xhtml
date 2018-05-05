@@ -96,6 +96,9 @@ td {
 		<div id="section">
 			<div id="content">
 				<h:form id="metaDataForm">
+				<f:metadata>
+				    <f:event type="preRenderView" listener="#{loginBean.check}" />
+				</f:metadata>
 					<!-- 	<h:commandButton value="Add New" style="position: absolute; top : 5px; right: 125px;" id="createLink" ajax="false" action="#{frameMetadata.edit()}" immediate="true" />
      	<h:commandButton value="Download" style="position: absolute; top : 5px; right: 35px;" id="link"  >
 					<p:dataExporter type="xls" target="metaTableList" fileName="metaData" />				    
@@ -136,7 +139,8 @@ td {
 							<p:column headerText="lookz_ID" width="10%"
 								styleClass="singleLine">
 								<h:outputText value="#{metaData.lookzId}" />
-							</p:column>
+							</p:column>							
+							
 
 							<p:column headerText="Internal id" width="10%"
 								styleClass="singleLine">

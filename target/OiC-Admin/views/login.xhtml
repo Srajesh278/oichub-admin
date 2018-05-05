@@ -7,8 +7,7 @@
       xmlns:f="http://java.sun.com/jsf/core" >
           
     <h:head>
-      <title> MQM
-    #{parameterBean.locationName} - #{parameterBean.version}  Login
+      <title> OIC
   </title>
 <meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -82,36 +81,21 @@
 
 <div id="logcontainer">
 	<div id="logheader">
-    <h3>Mechanical Quotation Management System</h3>
-    </div>
-	<div id="logmain">
-    <p class="desc">Centralized database of Flextronics plastic injection tools</p>
-    
     <h3>Login</h3>
+    </div>
+	<div id="logmain">  
+    
     <p:messages id="messages" showDetail="true" showSummary="false" autoUpdate="true" closable="true" />
     <h:form id="form" name="form" method="post" prependId="false">
-	<p:inputText id="userId" type="text" required="true" styleClass="text" value="#{loginBean.tstuser.userId}" onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="adid"/>
+	<p:inputText id="userId" type="text" required="true" styleClass="text" value="#{loginBean.oicuserLogin.userId}" onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="Enter your username "/>
 	<p:message for="userId" display="icon" />
-	<p:inputText id="Password" type="password" required="true" value="#{loginBean.tstuser.authCode}" onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="*****" autocomplete="off"/>
+	<p:inputText id="Password" type="password" required="true" value="#{loginBean.oicuserLogin.authCode}" onfocus="this.value = '';" onblur="if (this.value == '')" placeholder="Enter your password" autocomplete="off"/>
 	<p:message for="Password" id="msgLastname" display="icon" />
-	<p:commandButton styleClass="loginBtnClass" type="submit" value="Log in" actionListener="#{loginBean.doLogin()}" />
-	<br/><br/>
-	<u>
-		<p:commandLink  immediate="true"  styleClass="tooltip1" value="Reset Password"  action="#{loginBean.resetPWPage}"></p:commandLink>
-	</u>
-		<p:commandLink><img  src="../img/info.png" height="15" width="15" /></p:commandLink>
-		
-	<h> </h><b>               </b>
-	<u style="padding-left:50px;">
-		<p:commandLink  styleClass="tooltip1" immediate="true" value="Forgot Password" action="#{loginBean.forgotPW}"></p:commandLink>
-	</u>
-		<p:commandLink><img  src="../img/info.png" height="15" width="15" /></p:commandLink>		
+	<p:commandButton styleClass="loginBtnClass" type="submit" value="Log in" actionListener="#{loginBean.doLogin()}" />	
 	</h:form>
 	 </div>   
     <div id="logfooter">   		
     
-    <!-- <a href="#" styleClass="fp">Forgot Password?</a>
-    <a href="#" styleClass="nur">New User Request</a> -->
     </div>    
 </div>
 </body>

@@ -17,7 +17,8 @@
 		up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 
-	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://localhost:3306/3d_customer_api" />
 		<beans:property name="username" value="root" />
@@ -25,13 +26,14 @@
 		
 		<!-- <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://localhost:3306/3d_customer_api" />
-		<beans:property name="username" value="root" />
-		<beans:property name="password" value="Praveen@2014" /> -->
+		<beans:property name="username" value="3d_customer_api" />
+		<beans:property name="password" value="1000lookzmysqlcustomer" /> -->
 	</beans:bean>
 
 	<!-- Hibernate 4 SessionFactory Bean definition -->
 	<beans:bean id="hibernate4AnnotatedSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		
 		<beans:property name="dataSource" ref="dataSource" />
 		<beans:property name="annotatedClasses">
 			<beans:list>
@@ -88,7 +90,10 @@
 				
 								<beans:value>com.ag.model.TblUserDistAccount</beans:value>
 				
-								<beans:value>com.ag.model.TblUserType</beans:value>							
+								<beans:value>com.ag.model.TblUserType</beans:value>	
+								
+								<beans:value>com.ag.model.OICUserLogin</beans:value>													
+														
 				
 			</beans:list>
 		</beans:property>
@@ -118,6 +123,8 @@
 	<beans:bean id="tblInvShapeDAO"	class="com.ag.dao.TblInvShapeDAOImpl"/>	
 	<beans:bean id="tblUserDAO"	class="com.ag.dao.TblUserDAOImpl"/>	
 	<beans:bean id="tblInvDistFrameDAO"	class="com.ag.dao.TblInvDistFrameDAOImpl"/>	
+			<beans:bean id="userDao"	class="com.ag.dao.UserDAOImpl"/>	
+	
 	
 	
 	<beans:bean id="frameMetaDataService"
@@ -134,6 +141,10 @@
 		<beans:property name="tblUserDAO" ref="tblUserDAO"></beans:property>
 		<beans:property name="tblInvDistFrameDAO" ref="tblInvDistFrameDAO"></beans:property>		
 				
+	</beans:bean>
+	
+	<beans:bean id="userService" 	class="com.ag.service.UserServiceImpl">
+		<beans:property name="userDao" ref="userDao"></beans:property>					
 	</beans:bean>
 	
 	<beans:bean id="frameMetaData"
@@ -153,7 +164,9 @@
 	</beans:bean>
 	
 	
-	
+	<beans:bean id="loginBean" class="com.ag.bean.LoginBean" scope="session">
+		<beans:property name="service" ref="userService"></beans:property>
+	</beans:bean>
 	<context:component-scan base-package="com.ag" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />

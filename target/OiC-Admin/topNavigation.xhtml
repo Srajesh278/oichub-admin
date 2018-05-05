@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+      xmlns:f="http://java.sun.com/jsf/core">
+      <title>OIC</title>
+      <h:head>
+<meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta charset="utf-8"/>
+
+<meta http-equiv="X-Frame-Options" content="deny"/>
+<meta http-equiv="X-XSS-Protection" content="0"/>
+<meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+
+  <script>
+	if(top != window) {
+	 top.location = window.location
+	}
+	</script>
+	
+
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+<link href="css/reset.css" rel="stylesheet" type="text/css"/>
+</h:head> 
+<body>
+<ui:composition>
+<div id="container">
+<div id="header">
+<div class="logo"></div>
+<!--usercontainer-->
+        <div class="usercontainer">
+        	<div class="userinfo">
+            <span><b>#{loginBean.userName}</b></span><b> </b>
+            </div>
+            <div class="setting">
+            	<ul class="flowbox">
+            	<p:commandLink global="false"  immediate="true" action="#{loginBean.logout()}" actionListener="#{frameMetadata.clearErrorFramesList()}" ><img src="images/PowerIcon.png" width="15" height="15" />
+            	<p:confirm id="confirmation" header="Confirmation" message="Are you sure, you want to log off?" icon="ui-icon-alert" />
+            	
+             	</p:commandLink>                
+                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+ 					<p:commandButton id="Yes-Confirmation" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				    <p:commandButton id="No-Confirmation" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>              
+                </ul>
+            <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+</div>
+<h:form  rendered="#{loginBean.role ne 'TstSiteUser' and loginBean.role ne 'TstReader' and loginBean.role ne 'Customer' and loginBean.role ne 'VIToolMaker' }" id="tstsiteuser" prependId="false" >
+<div id="mainNav">
+            <ul>
+            <li><a id="uploadMetaData" href="#{request.contextPath}/views/uploadFrames.xhtml"><font size="2">Upload metadata</font><span class="caret"></span></a>
+           		        
+            </li>             
+            <li>
+                <a href="#{request.contextPath}/views/framesForDistributors.xhtml" id="frame-distributor" >Link frames to distributors <span class="caret"></span></a>
+               
+            </li>
+            
+            <li>
+                <a href="#{request.contextPath}/views/distributorsToFrames.xhtml" id="distributor-frame" >Link distributor to frames <span class="caret"></span></a>
+               
+            </li>
+            
+            </ul>
+            
+</div></h:form></div>
+
+</ui:composition>
+
+</body>
+</html>

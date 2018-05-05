@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<meta charset="utf-8" />
+	<title>OIC</title>
+	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link href="css/reset.css" rel="stylesheet" type="text/css" />
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    </f:facet>
+	<style type="text/css">
+.singleLine {
+	text-wrap: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 10px;
+	font-size: 10pt;
+}
+
+.ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-footer {
+    text-align: left;
+    padding: 8px 10px;
+}
+
+.ui-datatable-scrollable-theadclone th span.ui-column-title {
+	display: none !important;
+	height: 0px;
+}
+
+.star {
+	background: url("images/star.png") no-repeat !important;
+	width: 20px;
+	height: 16px;
+}
+
+#section #content {
+	text-align: left;
+	background: white;
+}
+
+div {
+	vertical-align: middle;
+}
+
+.ui-widget .ui-widget {
+	font-size: 14px;
+}
+
+.smallText {
+	font-size: 13px;
+}
+
+td {
+	padding: 5px;
+}
+</style>
+</h:head>
+
+<body>		
+			        <ui:insert name="topNavigation">
+						<ui:include src="topNavigation.xhtml" />
+					</ui:insert>
+
+	
+		<div id="section">
+			<div id="content">
+				<h:form id="metaDataForm">
+				   <f:metadata>
+					    <f:event type="preRenderView" listener="#{loginBean.check}" />
+					</f:metadata>
+				 	<h:commandButton value="Clear Logs" style="position: absolute; top : 5px; left: 305px; height: 25px;" id="createLink" ajax="false" action="#{frameMetadata.clearErrorFramesList()}" immediate="true" update="metaTableList" />
+    		
+
+					<p:fileUpload id="fileUpload" 
+						fileUploadListener="#{frameMetadata.uploadItem}" mode="advanced"
+						dragDropSupport="true" update="metaTableList dialog"
+						sizeLimit="1000000" allowTypes="/(\.|\/)(xls|xlsx)$/"
+						oncomplete="PF('errorDialog').show()">
+						<p:messages id="messages" showDetail="true" closable="true">
+						</p:messages>
+
+						<p:dataTable id="metaTableList" var="metaData"
+							style="width: 100%;" 
+							value="#{frameMetadata.errorframesList}"
+							resizableColumns="true" draggableColumns="false"
+							rowIndexVar="rowIndex" rows="100" paginator="false"
+							scrollable="true" scrollWidth="2800" >	
+							
+							<f:facet name="header"> Error logs</f:facet>					
+
+
+							<p:column headerText="UUID" width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.uuid}" />
+							</p:column>
+
+							<p:column headerText="lookz_ID" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.lookzId}" />
+							</p:column>
+
+							<p:column headerText="Internal id" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.internalId}" />
+							</p:column>
+
+							<p:column headerText="Model Number" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.modelNumber}" />
+							</p:column>
+
+							<p:column headerText="Product Name" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.productName}" />
+							</p:column>
+
+							<p:column headerText="Category (Sunglasses / Eyeglasses)"
+								width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.tblInvCategory.category}" />
+							</p:column>
+							<p:column headerText="Frame Type" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.tblInvFrametype.frametype}" />
+							</p:column>
+							<p:column headerText="Brand" width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.tblInvBrand.brand}" />
+							</p:column>
+							<p:column headerText="Shape" width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.tblInvShape.shape}" />
+							</p:column>
+							<p:column headerText="Frontal Color" width="10%"
+								styleClass="singleLine">
+								<h:outputText
+									value="#{metaData.tblInvColorByFrameColorId.color}" />
+							</p:column>
+							<p:column headerText="Temple Color" width="10%"
+								styleClass="singleLine">
+								<h:outputText
+									value="#{metaData.tblInvColorByTempleColorId.color}" />
+							</p:column>
+							<p:column headerText="Glass Color" width="10%"
+								styleClass="singleLine">
+								<h:outputText
+									value="#{metaData.tblInvColorByGlassColorId.color}" />
+							</p:column>
+							<p:column headerText="Frame Material" width="10%"
+								styleClass="singleLine">
+								<h:outputText
+									value="#{metaData.tblInvMaterialByFrameMaterialId.material}" />
+							</p:column>
+							<p:column headerText="Temple Material" width="10%"
+								styleClass="singleLine">
+								<h:outputText
+									value="#{metaData.tblInvMaterialByTempleMaterialId.material}" />
+							</p:column>
+							<p:column
+								headerText="Material Reflection (Shinny / Matte / Normal)"
+								width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.materialReflection}" />
+							</p:column>
+							<p:column
+								headerText="Gender (Men / Women / Unisex / Kids / Teen)	"
+								width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.tblInvGender.gender}" />
+							</p:column>
+							<p:column headerText="Product Description (if any)" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.description}" />
+							</p:column>
+
+							<p:column headerText="Price" width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.price}" />
+							</p:column>
+							<p:column headerText="Price Unit (Rs)" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.priceUnit}" />
+							</p:column>
+							<p:column headerText="Size (Small, Medium, Large)" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.size}" />
+							</p:column>
+							<p:column headerText="Size Actual" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.sizeActual}" />
+							</p:column>
+							<p:column headerText="Weight (Light, Average, Above Average)"
+								width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.weight}" />
+							</p:column>
+							<p:column headerText="Weight Actual (in grams)" width="10%"
+								styleClass="singleLine">
+								<h:outputText value="#{metaData.weightActualGrams}" />
+							</p:column>
+
+							<p:column headerText="Path" width="10%" styleClass="singleLine">
+								<h:outputText value="#{metaData.imagePath}" />
+							</p:column>
+
+
+						</p:dataTable>
+					</p:fileUpload>
+				</h:form>
+
+
+
+				<p:dialog header="Upload Status" widgetVar="errorDialog"
+					modal="true" showEffect="fade" width="300" height="50"
+					hideEffect="fade" resizable="false">
+					<h:form id="dialog">
+						<p:outputPanel id="fileUploadSuccess"
+							rendered="#{!frameMetadata.errorReport}" style="text-align:left;">
+					      File uploaded successfully without errors.
+					    </p:outputPanel>
+
+
+						<p:outputPanel id="partielUploadSuccess" style="text-align:left;"
+							rendered="#{frameMetadata.errorReport}">
+							<p:outputLabel>
+								<font color="red"> Source file uploaded with errors</font>
+								<h:commandLink id="linkkk" ajax="true"
+									action="#{frameMetadata.getDownload()}"
+									onclick="PF('errorDialog').hide()">
+									<br></br>Click to view the log	    
+							</h:commandLink>
+							</p:outputLabel>
+						</p:outputPanel>
+					</h:form>
+				</p:dialog>
+
+
+				
+
+			</div>
+		</div>
+	
+
+</body>
+</html>
