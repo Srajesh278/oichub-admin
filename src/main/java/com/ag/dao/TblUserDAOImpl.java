@@ -20,4 +20,17 @@ public class TblUserDAOImpl extends GenericDAOImpl<TblUser, String> implements T
 	    	
 	    	//
 	    } 
+	
+	@Override
+	   	@SuppressWarnings("unchecked")
+	   	public TblUser get(String key,String value) { 
+	   		Session session = currentSession();            
+	           
+	           Query hqlQuery = session.createQuery("from TblUser y where y.username= ?");
+	           TblUser user = (TblUser) hqlQuery.setString(0,value).uniqueResult();
+	       
+	   		return user != null ? user : null ;    
+	           
+	           
+	   }
 }
